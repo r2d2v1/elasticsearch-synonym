@@ -1,5 +1,6 @@
 #!/bin/sh
 
+sudo apt-get install python-pip
 sudo apt-get install default-jdk
 wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.2.1.zip
 sudo apt-get install unzip
@@ -7,11 +8,16 @@ sudo apt-get install unzip
 mkdir env
 unzip elasticsearch-1.2.1 -d env/
 rm elasticsearch-1.2.1.zip
-
 cd env/elasticsearch-1.2.1/
+
 bin/plugin -install elasticsearch/elasticsearch-cloud-aws/2.1.1
 bin/plugin -install mobz/elasticsearch-head
 bin/plugin -install elasticsearch/elasticsearch-lang-python/2.0.0
 
+#write aws config file
 
-#bin/elasticsearch
+OUTPUT_FILE=es-output.log
+nohup ./bin/elasticsearch 2>&1 > $OUTPUT_FILE &
+echo "started es pid:`pgrep -f elastic`"
+echo "logging at:`pwd`/$OUTPUT_FILE"
+
